@@ -31,11 +31,12 @@ public class Simulation {
 	
 	public void simulate() {
 		
-		//ideally separate sim and render logic into threads
-		loop();
+		SimTimeThread time = new SimTimeThread(tickTarget, timedProcesses);
+		time.start();
 		
 	}
 	
+	/*
 	//temporary solution
 	private void loop() {
 		while(true){
@@ -53,6 +54,6 @@ public class Simulation {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 }
