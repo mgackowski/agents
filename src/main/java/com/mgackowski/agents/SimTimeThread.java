@@ -13,16 +13,19 @@ import org.apache.log4j.Logger;
  */
 public class SimTimeThread extends Thread {
 	
-	static Logger LOG = Logger.getLogger(SimTimeThread.class);
+	private static long SECOND = 1000000000;
 	
-	double updateFrequency;
+	private static Logger LOG = Logger.getLogger(SimTimeThread.class);
+	private static float WAKE_TO_TICK_RATIO = 1; //increase to up precision but load CPU
+	
+	long updateFrequency;
 	List<Timed> registeredProcesses;
-	double nanosBetweenTicks;
+	long nanosBetweenTicks;
 	
-	public SimTimeThread(double updateFrequency, List<Timed> registeredProcesses) {
-		super("SIM");
+	public SimTimeThread(long updateFrequency, List<Timed> registeredProcesses) {
+		super("LOGIC");	// Thread name
 		this.updateFrequency = updateFrequency;
-		this.nanosBetweenTicks = 1000000000 / updateFrequency;
+		this.nanosBetweenTicks = (long) (SECOND / updateFrequency);
 		this.registeredProcesses = registeredProcesses;
 	}
 
@@ -30,24 +33,38 @@ public class SimTimeThread extends Thread {
 		return updateFrequency;
 	}
 
-	public void setUpdateFrequency(double updateFrequency) {
+	public void setUpdateFrequency(long updateFrequency) {
 		this.updateFrequency = updateFrequency;
 	}
 
 	public void run() {
 		
+		LOG.debug("nanosBetweenTicks=" + nanosBetweenTicks);
+		
 		double currentTime = System.nanoTime();
 		double lastPlannedTickTime = currentTime;
+		long millisBetweenWakes = (long) ((nanosBetweenTicks / 1000000) / WAKE_TO_TICK_RATIO);
 		
 		while(updateFrequency > 0) {
 			currentTime = System.nanoTime();
-			if (currentTime - lastPlannedTickTime >= updateFrequency) {
+			if (currentTime - lastPlannedTickTime >= nanosBetweenTicks) {
 			
 				tickAll();
 				lastPlannedTickTime += nanosBetweenTicks;
 				LOG.debug("Tick");
 				
 			}
+			
+            while (currentTime - lastPlannedTickTime <= nanosBetweenTicks)
+            {
+               try {
+            	   Thread.sleep(millisBetweenWakes); 
+            	   }
+               catch(Exception e) {
+            	   LOG.info("Inter-update sleep interrupted.");
+               }
+               currentTime = System.nanoTime();
+            }
 		}
 	}
 	

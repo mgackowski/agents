@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Agent {
-	//defer most of this to factories
+	
 	
 	private String name;
 	
 	private List<Timed> processes = new ArrayList<Timed>();
-	private Needs needs = new Needs();
+	private Needs needs;
 	
-	public Agent(String name) {
+	public Agent(String name, List<Timed> processes, Needs needs) {
 		this.name = name;
+		this.processes = processes;
+		this.needs = needs;
 	}
 
-	public void init() {
+	public void initProcesses() {
 		processes.add(new Deterioration(needs));
 	}
 

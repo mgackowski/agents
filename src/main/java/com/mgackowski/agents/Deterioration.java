@@ -20,4 +20,9 @@ public class Deterioration implements Timed {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Deterioration [needs=" + needs + ", deteriorationRate=" + deteriorationRate + "]";
+	}
+
 }

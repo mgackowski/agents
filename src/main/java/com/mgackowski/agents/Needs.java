@@ -11,10 +11,8 @@ public class Needs {
 	
 	private Map<NeedName, Float> needMap = new HashMap<NeedName, Float>();
 	
-	public Needs() {
-		//temporarily pre-set here
-		needMap.put(NeedName.FOOD, 100f);
-		needMap.put(NeedName.ENERGY, 100f);
+	public Needs(Map<NeedName, Float> needMap) {
+		this.needMap = needMap;
 	}
 
 	public Map<NeedName, Float> getNeedMap() {

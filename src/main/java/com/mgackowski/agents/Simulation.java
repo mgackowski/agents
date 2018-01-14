@@ -3,12 +3,20 @@ package com.mgackowski.agents;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.mgackowski.agents.AgentFactory.AgentPreset;
+
 public class Simulation {
+	
+	private Logger LOG = Logger.getLogger(Simulation.class);
 	
 	long tickTarget;
 	
 	List<Timed> timedProcesses = new ArrayList<Timed>();
 	List<Agent> agents = new ArrayList<Agent>();
+	
+	AgentFactory agentFactory = new AgentFactory();
 	
 	public Simulation(long tickTarget) {
 		this.tickTarget = tickTarget;
@@ -16,44 +24,27 @@ public class Simulation {
 
 	public void init() {
 		
-		Agent alice = new Agent("Alice");
+		//Extract to AgentManager class
+		
+		Agent alice = agentFactory.getAgent(AgentPreset.DEFAULT, "Alice");
 		agents.add(alice);
-		alice.init();
+		alice.initProcesses();
 		timedProcesses.addAll(alice.getProcesses());
 		
-		Agent bob = new Agent("Bob");
+		Agent bob = agentFactory.getAgent(AgentPreset.DEFAULT, "Bob");
 		agents.add(bob);
-		bob.init();
+		bob.initProcesses();
 		timedProcesses.addAll(bob.getProcesses());
 		
-		System.out.println(timedProcesses);
+		LOG.info(timedProcesses);
 	}
 	
 	public void simulate() {
 		
 		SimTimeThread time = new SimTimeThread(tickTarget, timedProcesses);
 		time.start();
+		LOG.info("Simulation started.");
 		
 	}
-	
-	/*
-	//temporary solution
-	private void loop() {
-		while(true){
-			for (Timed process : timedProcesses) {
-				process.tick();
-			}
-			
-			//temp
-			System.out.println(agents);
-			
-			try {
-				Thread.sleep(tickTarget);
-			} catch (InterruptedException e) {
-				System.out.println("Main thread interrupted!");
-				e.printStackTrace();
-			}
-		}
-	}*/
 
 }
