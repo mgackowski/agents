@@ -1,7 +1,11 @@
-package com.mgackowski.agents;
+package com.mgackowski.agents.agent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mgackowski.agents.agent.needs.Needs;
+import com.mgackowski.agents.agent.processes.Deterioration;
+import com.mgackowski.agents.agent.processes.Timed;
 
 public class Agent {
 	

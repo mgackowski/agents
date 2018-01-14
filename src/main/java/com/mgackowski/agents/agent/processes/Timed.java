@@ -1,4 +1,4 @@
-package com.mgackowski.agents;
+package com.mgackowski.agents.agent.processes;
 
 public interface Timed {
 	

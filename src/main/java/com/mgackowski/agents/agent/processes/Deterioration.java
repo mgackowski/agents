@@ -1,7 +1,15 @@
-package com.mgackowski.agents;
+package com.mgackowski.agents.agent.processes;
 
 import java.util.Map;
 
+import com.mgackowski.agents.agent.needs.NeedName;
+import com.mgackowski.agents.agent.needs.Needs;
+
+/**
+ * Time-based deterioration of Needs creates incentive for Agents to pursue actions.
+ * @author mgackowski
+ *
+ */
 public class Deterioration implements Timed {
 	
 	private Needs needs;

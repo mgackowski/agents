@@ -1,5 +1,7 @@
 package com.mgackowski.agents;
 
+import com.mgackowski.agents.sim.Simulation;
+
 public class App 
 {
     public static void main( String[] args )

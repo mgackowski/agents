@@ -1,4 +1,4 @@
-package com.mgackowski.agents;
+package com.mgackowski.agents.agent.needs;
 
 public enum NeedName {
 	

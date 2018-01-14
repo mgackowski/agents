@@ -1,4 +1,4 @@
-package com.mgackowski.agents;
+package com.mgackowski.agents.agent.needs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class Needs {
 		return needMap;
 	}
 	
-	float change(NeedName need, Float difference) {
+	public float change(NeedName need, Float difference) {
 		float newValue = needMap.get(need) + difference;
 		needMap.put(need, newValue);
 		LOG.debug("Need " + need.name() + " changed to " + newValue);

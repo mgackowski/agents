@@ -1,8 +1,10 @@
-package com.mgackowski.agents;
+package com.mgackowski.agents.sim;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import com.mgackowski.agents.agent.processes.Timed;
 
 /**
  * A simple timing mechanism; requires tick rate and a list of Timed objects (registered
@@ -13,49 +15,47 @@ import org.apache.log4j.Logger;
  */
 public class SimTimeThread extends Thread {
 	
-	private static long SECOND = 1000000000;
-	
 	private static Logger LOG = Logger.getLogger(SimTimeThread.class);
-	private static float WAKE_TO_TICK_RATIO = 1; //increase to up precision but load CPU
 	
-	long updateFrequency;
+	private static float WAKE_TO_TICK_RATIO = 1; // increase to up precision but load CPU
+	
 	List<Timed> registeredProcesses;
-	long nanosBetweenTicks;
+	long targetUpdateFrequency;
+	long targetMillisBetweenTicks;
 	
 	public SimTimeThread(long updateFrequency, List<Timed> registeredProcesses) {
-		super("LOGIC");	// Thread name
-		this.updateFrequency = updateFrequency;
-		this.nanosBetweenTicks = (long) (SECOND / updateFrequency);
+		super("[logic]");	// thread name
+		this.targetUpdateFrequency = updateFrequency;
+		this.targetMillisBetweenTicks = (long) (1000 / updateFrequency);
 		this.registeredProcesses = registeredProcesses;
 	}
 
 	public double getUpdateFrequency() {
-		return updateFrequency;
+		return targetUpdateFrequency;
 	}
 
 	public void setUpdateFrequency(long updateFrequency) {
-		this.updateFrequency = updateFrequency;
+		this.targetUpdateFrequency = updateFrequency;
 	}
 
 	public void run() {
 		
-		LOG.debug("nanosBetweenTicks=" + nanosBetweenTicks);
+		LOG.debug("targetMillisBetweenTicks=" + targetMillisBetweenTicks);
 		
-		double currentTime = System.nanoTime();
+		double currentTime = System.currentTimeMillis();
 		double lastPlannedTickTime = currentTime;
-		long millisBetweenWakes = (long) ((nanosBetweenTicks / 1000000) / WAKE_TO_TICK_RATIO);
+		long millisBetweenWakes = (long) (targetMillisBetweenTicks / WAKE_TO_TICK_RATIO);
 		
-		while(updateFrequency > 0) {
-			currentTime = System.nanoTime();
-			if (currentTime - lastPlannedTickTime >= nanosBetweenTicks) {
+		while(targetUpdateFrequency > 0) {
+			currentTime = System.currentTimeMillis();
+			if (currentTime - lastPlannedTickTime >= targetMillisBetweenTicks) {
 			
 				tickAll();
-				lastPlannedTickTime += nanosBetweenTicks;
-				LOG.debug("Tick");
+				lastPlannedTickTime += targetMillisBetweenTicks;
 				
 			}
 			
-            while (currentTime - lastPlannedTickTime <= nanosBetweenTicks)
+            while (currentTime - lastPlannedTickTime <= targetMillisBetweenTicks)
             {
                try {
             	   Thread.sleep(millisBetweenWakes); 
@@ -63,7 +63,7 @@ public class SimTimeThread extends Thread {
                catch(Exception e) {
             	   LOG.info("Inter-update sleep interrupted.");
                }
-               currentTime = System.nanoTime();
+               currentTime = System.currentTimeMillis();
             }
 		}
 	}
@@ -72,6 +72,7 @@ public class SimTimeThread extends Thread {
 		for(Timed process : registeredProcesses) {
 			process.tick();
 		}
+		LOG.debug("Ticked " + registeredProcesses.size() + " processes");
 	}
 
 }
