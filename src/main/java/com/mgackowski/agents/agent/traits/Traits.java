@@ -21,7 +21,7 @@ public class Traits {
 		private Map<NeedName, Float> deteriorationRate;
 		
 		public TraitsBuilder() {
-			//required traits}
+			//required traits
 		}
 		
 		public TraitsBuilder deteriorationRate(Map<NeedName, Float> deteriorationRate) {

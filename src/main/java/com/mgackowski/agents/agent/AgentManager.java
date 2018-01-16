@@ -34,8 +34,10 @@ public class AgentManager {
 	
 	public boolean destroyAgent(Agent agent) {
 		
+		agents.remove(agent);
+		
 		LOG.info("Agent removed; Agent=" + agent);
-		return false;
+		return true;
 		
 	}
 
