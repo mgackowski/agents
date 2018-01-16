@@ -7,15 +7,31 @@ import com.mgackowski.agents.agent.needs.NeedName;
 
 public class Traits {
 	
-	//TODO: Use this instead of hardwired value in Deterioration class
 	Map<NeedName, Float> deteriorationRate = new HashMap<NeedName, Float>();
 
-	public Traits(Map<NeedName, Float> deteriorationRate) {
-		this.deteriorationRate = deteriorationRate;
+	public Traits(TraitsBuilder builder) {
+		this.deteriorationRate = builder.deteriorationRate;
 	}
 
 	public Map<NeedName, Float> getDeteriorationRate() {
 		return deteriorationRate;
+	}
+	
+	public static class TraitsBuilder {
+		private Map<NeedName, Float> deteriorationRate;
+		
+		public TraitsBuilder() {
+			//required traits}
+		}
+		
+		public TraitsBuilder deteriorationRate(Map<NeedName, Float> deteriorationRate) {
+			this.deteriorationRate = deteriorationRate;
+			return this;
+		}
+		
+		public Traits build() {
+			return new Traits(this);
+		}
 	}
 
 }

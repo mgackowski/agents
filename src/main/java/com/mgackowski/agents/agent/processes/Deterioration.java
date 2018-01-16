@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.mgackowski.agents.agent.needs.NeedName;
 import com.mgackowski.agents.agent.needs.Needs;
+import com.mgackowski.agents.agent.traits.Traits;
 
 /**
  * Time-based deterioration of Needs creates incentive for Agents to pursue actions.
@@ -13,24 +14,27 @@ import com.mgackowski.agents.agent.needs.Needs;
 public class Deterioration implements Timed {
 	
 	private Needs needs;
-	private float deteriorationRate = -0.01f;
+	private Traits traits;
 	
-	public Deterioration(Needs needs) {
+	public Deterioration(Needs needs, Traits traits) {
 		this.needs = needs;
+		this.traits = traits;
 	}
 
 	public boolean tick() {
 		
 		Map<NeedName, Float> needMap = needs.getNeedMap();
+		Map<NeedName, Float> deteriorationMap = traits.getDeteriorationRate();
+		
 		for (NeedName need : needMap.keySet()) {
-			needs.change(need, deteriorationRate);
+			needs.change(need, deteriorationMap.get(need));
 		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Deterioration [needs=" + needs + ", deteriorationRate=" + deteriorationRate + "]";
+		return "Deterioration [needs=" + needs + ", traits=" + traits + "]";
 	}
 
 }
