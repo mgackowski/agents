@@ -3,7 +3,7 @@ package com.mgackowski.agents.agent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mgackowski.agents.agent.needs.Needs;
+import com.mgackowski.agents.agent.needs.NeedLevels;
 import com.mgackowski.agents.agent.processes.Deterioration;
 import com.mgackowski.agents.agent.processes.Timed;
 import com.mgackowski.agents.agent.traits.Traits;
@@ -14,10 +14,10 @@ public class Agent {
 	private String name;
 	
 	private List<Timed> processes = new ArrayList<Timed>();
-	private Needs needs;
+	private NeedLevels needs;
 	private Traits traits;
 	
-	public Agent(String name, List<Timed> processes, Needs needs, Traits traits) {
+	public Agent(String name, List<Timed> processes, NeedLevels needs, Traits traits) {
 		this.name = name;
 		this.processes = processes;
 		this.needs = needs;
@@ -36,7 +36,7 @@ public class Agent {
 		return processes;
 	}
 
-	public Needs getNeeds() {
+	public NeedLevels getNeeds() {
 		return needs;
 	}
 

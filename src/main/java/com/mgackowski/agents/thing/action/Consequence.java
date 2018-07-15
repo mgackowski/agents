@@ -1,20 +1,20 @@
 package com.mgackowski.agents.thing.action;
 
-import com.mgackowski.agents.agent.needs.NeedName;
+import com.mgackowski.agents.needs.Need;
 
 public class Consequence {
 	
-	NeedName needName;
+	Need needName;
 	float changeAmount;
 	float changeRate;
 	
-	public Consequence(NeedName needName, float changeAmount, float changeRate) {
+	public Consequence(Need needName, float changeAmount, float changeRate) {
 		this.needName = needName;
 		this.changeAmount = changeAmount;
 		this.changeRate = changeRate;
 	}
 
-	public NeedName getNeedName() {
+	public Need getNeedName() {
 		return needName;
 	}
 
